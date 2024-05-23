@@ -1,3 +1,6 @@
 #VS Code
 *.code-workspace
 .vscode/
+
+#Conda Envrionments
+conda_env/
