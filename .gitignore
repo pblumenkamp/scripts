@@ -4,3 +4,6 @@
 
 #Conda Envrionments
 conda_env/
+
+#Folders with test files
+test/
