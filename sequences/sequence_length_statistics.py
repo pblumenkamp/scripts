@@ -12,7 +12,7 @@ def main(files: List[str]):
         #Detect if FASTA or FASTQ
         with gzip.open(file, "rt") if file.endswith(".gz") else open(file) as f:
             for line in f:
-                if not line.split() or line.startswith("#"):
+                if not line.strip() or line.startswith("#"):
                     continue
                 #FASTA file
                 if line.startswith(">"):
@@ -49,7 +49,7 @@ def sequence_lengths_in_fasta(file: str) -> Dict[int, int]:
     with gzip.open(file, "rt") if file.endswith(".gz") else open(file) as fasta:
         sequence: str = ""
         for line in fasta:
-            if not line.split() or line.startswith("#"):
+            if not line.strip() or line.startswith("#"):
                 continue
             if line.startswith(">"):
                 statistics[len(sequence)] = statistics.get(len(sequence), 0) + 1
@@ -63,7 +63,7 @@ def sequence_lengths_in_fastq(file: str) -> Dict[int, int]:
     statistics: Dict[int, int] = {}
     with gzip.open(file, "rt") if file.endswith(".gz") else open(file) as fastq:
         for line in fastq:
-            if not line.split() or line.startswith("#"):
+            if not line.strip() or line.startswith("#"):
                 continue
             sequence = next(fastq).strip()
             statistics[len(sequence)] = statistics.get(len(sequence), 0) + 1
