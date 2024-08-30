@@ -3,27 +3,26 @@ import gzip
 import itertools
 import sys
 
-from typing import Callable, Dict, Iterator, List, TextIO
+from typing import TextIO
 
 
 def main(file: str, chunkSize: int, slidingWindow: bool):
     f: TextIO
-    get_sequence_lengths: Callable
-    #Detect if FASTA or FASTQ
+    # Detect if FASTA or FASTQ
     with gzip.open(file, "rt") if file.endswith(".gz") else open(file) as f:
         for line in f:
             if not line.split() or line.startswith("#"):
                 continue
-            #FASTA file
+            # FASTA file
             if line.startswith(">"):
                 f.seek(0)
                 chunk_fasta(f, chunkSize, slidingWindow)
                 break
-            #FASTQ file
+            # FASTQ file
             elif line.startswith("@"):
                 next(f) # sequence
                 line_with_plus: str = next(f)
-                #Third line must start with plus else invalid FASTQ file
+                # Third line must start with plus else invalid FASTQ file
                 if line_with_plus.startswith("+"):
                     f.seek(0)
                     chunk_fastq(f, chunkSize, slidingWindow)
@@ -44,12 +43,12 @@ def chunk_fasta(file: TextIO, chunkSize: int, slidingWindow: bool) -> None:
         if line.startswith(">"):
             if header:
                 if slidingWindow:
-                    for i in range(len(sequence) - chunkSize + 1):
-                        print("{} - {}".format(header, i))
+                    for i in range(max(len(sequence) - chunkSize, 0) + 1):
+                        print("{} - {}".format(header, i+1))
                         print(sequence[i:i+chunkSize])
                 else:
                     for i,seq in enumerate(itertools.batched(sequence, chunkSize)):
-                        print("{} - {}".format(header, i))
+                        print("{} - {}".format(header, i+1))
                         print("".join(seq))
             header = line.strip()
             sequence = ""
@@ -58,12 +57,12 @@ def chunk_fasta(file: TextIO, chunkSize: int, slidingWindow: bool) -> None:
     
     if header:
         if slidingWindow:
-            for i in range(len(sequence) - chunkSize + 1):
-                print("{} - {}".format(header, i))
+            for i in range(max(len(sequence) - chunkSize, 0) + 1):
+                print("{} - {}".format(header, i+1))
                 print(sequence[i:i+chunkSize])
         else:
             for i,seq in enumerate(itertools.batched(sequence, chunkSize)):
-                print("{} - {}".format(header, i))
+                print("{} - {}".format(header, i+1))
                 print("".join(seq))
 
 
@@ -77,7 +76,7 @@ def chunk_fastq(file: TextIO, chunkSize: int, slidingWindow: bool) -> None:
         quality: str = next(file) # quality line
         if slidingWindow:
             for i in range(len(sequence) - chunkSize + 1):
-                print("{} - {}".format(header, i))
+                print("{} - {}".format(header, i+1))
                 print(sequence[i:i+chunkSize])
                 print("+")
                 print(quality[i:i+chunkSize])
