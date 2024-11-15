@@ -5,12 +5,12 @@ from pathlib import Path
 from typing import Dict, Set
 
 import gffutils
-from memory_profiler import profile
+#from memory_profiler import profile
 
 
 missing_ids: int = 0
 
-@profile
+#@profile
 def main(gff_file: Path):
     used_ids: Set[str] = set()
     duplicate_ids_counter: Dict[str, int] = {}

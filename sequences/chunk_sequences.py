@@ -94,7 +94,7 @@ if __name__ == "__main__":
         sys.exit(1)
     parser = argparse.ArgumentParser(
                     prog=__file__,
-                    description='Split FASTA/Q sequences into chunks')
+                    description='Split FASTA/Q sequences into chunks or sliding window fragments')
     parser.add_argument('fasta', metavar="FASTA/Q")
     parser.add_argument('-c', '--chunk-size', dest="chunk_size", required=True, type=int)
     parser.add_argument('-s', '--sliding-window', dest="sliding_window", action='store_true')

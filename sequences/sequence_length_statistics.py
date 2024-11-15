@@ -40,7 +40,7 @@ def main(files: List[str]):
 
     print("sequence_length\t{}".format("\t".join(files)))
     for read_length in range(length_of_longest_read):
-        counts: List[int] = [str(statistics[file].get(read_length+1, 0)) for file in files]
+        counts: List[str] = [str(statistics[file].get(read_length+1, 0)) for file in files]
         print("{}\t{}".format(read_length+1, "\t".join(counts)))
 
 
